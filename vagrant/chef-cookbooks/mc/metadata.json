@@ -1,0 +1,32 @@
+{
+  "name": "mc",
+  "description": "Installs mc",
+  "long_description": "",
+  "maintainer": "Gera-IT",
+  "maintainer_email": "e.s.solovyov@gmail.com",
+  "license": "Apache 2.0",
+  "platforms": {
+    "ubuntu": [
+
+    ]
+  },
+  "dependencies": {
+  },
+  "recommendations": {
+  },
+  "suggestions": {
+  },
+  "conflicting": {
+  },
+  "providing": {
+  },
+  "replacing": {
+  },
+  "attributes": {
+  },
+  "groupings": {
+  },
+  "recipes": {
+  },
+  "version": "0.1.0"
+}

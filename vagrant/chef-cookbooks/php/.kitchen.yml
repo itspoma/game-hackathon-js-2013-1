@@ -1,0 +1,35 @@
+driver_plugin: vagrant
+driver_config:
+  require_chef_omnibus: true
+  customize:
+    memory: 1024
+
+platforms:
+  - name: ubuntu-12.04
+    run_list:
+      - recipe[apt]
+  - name: ubuntu-10.04
+    run_list:
+      - recipe[apt]
+  - name: centos-6.4
+  - name: centos-5.9
+
+suites:
+  - name: default
+    run_list:
+      - recipe[php::default]
+  - name: source
+    run_list:
+      - recipe[php::source]
+  - name: module-packages
+    run_list:
+      - recipe[php::default]
+      - recipe[php::module_apc]
+      - recipe[php::module_curl]
+      - recipe[php::module_fpdf]
+      - recipe[php::module_gd]
+      - recipe[php::module_ldap]
+      - recipe[php::module_memcache]
+      - recipe[php::module_mysql]
+      - recipe[php::module_pgsql]
+      - recipe[php::module_sqlite3]

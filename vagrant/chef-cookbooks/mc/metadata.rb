@@ -1,0 +1,6 @@
+maintainer       "Gera-IT"
+maintainer_email "e.s.solovyov@gmail.com"
+license          "Apache 2.0"
+description      "Installs mc"
+version          "0.1"
+supports         "ubuntu"
