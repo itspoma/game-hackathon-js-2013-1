@@ -22,13 +22,14 @@ Vagrant.configure("2") do |config|
   config.vm.box_url = "http://files.vagrantup.com/precise32.box" # Ubuntu precise 32 VirtualBox
 
   config.vm.provider :virtualbox do |v|
-    v.customize ["modifyvm", :id, "--memory", 1024]
+    v.customize ["modifyvm", :id, "--memory", 512]
   end
 
-  config.vm.network :private_network, ip: "192.168.10.101"
+  # config.vm.network :private_network, ip: "192.168.100.45"
+  config.vm.network :private_network, ip: "192.168.10.101", auto_config: true
   # config.vm.network :forwarded_port, guest: 80, host: 8080, auto_correct: true, id: "vm-game-www"
   # config.vm.network :forwarded_port, guest: 22, host: 2222, auto_correct: true, id: "vm-game-vagrant"
-  # config.vm.network :forwarded_port, guest: 3000, host: 3000
+  config.vm.network :forwarded_port, guest: 9999, host: 9999
   config.ssh.forward_agent = true
 
   nfs_setting = RUBY_PLATFORM =~ /darwin/ || RUBY_PLATFORM =~ /linux/
