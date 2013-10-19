@@ -1,0 +1,140 @@
+::-moz-selection {
+  background-color: white;
+  color: #54b1ee; }
+
+::selection {
+  background-color: white;
+  color: #54b1ee; }
+
+* {
+  font: 15px verdana; }
+
+body#page-welcome {
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  -ms-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+  background-color: #b5e4ff; }
+  body#page-welcome .hero {
+    position: fixed;
+    z-index: 1; }
+    body#page-welcome .hero.cartman {
+      bottom: -23px; }
+    body#page-welcome .hero.homer {
+      bottom: -10px;
+      right: 210px; }
+    body#page-welcome .hero.bender {
+      width: 400px;
+      left: 250px;
+      bottom: -150px; }
+    body#page-welcome .hero.peter {
+      right: 150px;
+      top: 50px; }
+    body#page-welcome .hero.stan_smith {
+      right: -30px;
+      bottom: 0px; }
+    body#page-welcome .hero.patrik {
+      left: 140px;
+      top: 0px; }
+    body#page-welcome .hero.johnny_bravo {
+      width: 200px;
+      left: 0px; }
+    body#page-welcome .hero.cow {
+      width: 150px;
+      left: -5px;
+      top: 36%; }
+    body#page-welcome .hero.arnold {
+      width: 200px;
+      top: 10px;
+      right: 10px; }
+    body#page-welcome .hero.real_monsters {
+      width: 230px;
+      top: 0px;
+      left: 42%; }
+  body#page-welcome #play {
+    z-index: 999;
+    width: 250px;
+    height: 120px;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    margin-left: -125px;
+    margin-top: -60px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+    border-radius: 10px;
+    font-size: 100px;
+    font-family: 'Poiret One', sans-serif;
+    background: #d5edff;
+    color: #1575ac;
+    cursor: pointer;
+    padding: 10px;
+    text-align: center;
+    -webkit-box-shadow: 0 10px 15px -3px #1581a3;
+    -moz-box-shadow: 0 10px 15px -3px #1581a3;
+    -ms-border-radius: 0 10px 15px -3px #1581a3;
+    -o-border-radius: 0 10px 15px -3px #1581a3;
+    box-shadow: 0 10px 15px -3px #1581a3;
+    -webkit-transition: all 0.2s ease-in-out;
+    -moz-transition: all 0.2s ease-in-out;
+    -ms-transition: all 0.2s ease-in-out;
+    -o-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out; }
+    body#page-welcome #play:hover {
+      -webkit-box-shadow: 0 10px 25px #1581a3;
+      -moz-box-shadow: 0 10px 25px #1581a3;
+      -ms-border-radius: 0 10px 25px #1581a3;
+      -o-border-radius: 0 10px 25px #1581a3;
+      box-shadow: 0 10px 25px #1581a3; }
+    body#page-welcome #play:active {
+      -webkit-box-shadow: 2px 2px 2px rgba(155, 155, 155, 0.28) inset;
+      -moz-box-shadow: 2px 2px 2px rgba(155, 155, 155, 0.28) inset;
+      -ms-border-radius: 2px 2px 2px rgba(155, 155, 155, 0.28) inset;
+      -o-border-radius: 2px 2px 2px rgba(155, 155, 155, 0.28) inset;
+      box-shadow: 2px 2px 2px rgba(155, 155, 155, 0.28) inset; }
+
+body#page-game {
+  background-color: #e0ffe2; }
+  body#page-game.loading {
+    background-color: red; }
+    body#page-game.loading #area {
+      display: none; }
+  body#page-game #area {
+    background-color: #005700; }
+    body#page-game #area .player {
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      background-repeat: no-repeat;
+      border: 1px red solid; }
+      body#page-game #area .player.hero_ericcartman {
+        background-image: url("/img/heros/eric-cartman/1.png");
+        background-size: 100px;
+        width: 100px;
+        height: 100px; }
+      body#page-game #area .player.hero_kylebroflovski {
+        background-image: url("/img/heros/kyle-broflovski/1.png");
+        background-size: 100px;
+        width: 100px;
+        height: 120px; }
+      body#page-game #area .player.hero_stanmarsh {
+        background-image: url("/img/heros/stan-marsh/1.png");
+        background-size: 100px;
+        width: 100px;
+        height: 155px; }
+
+body.loading {
+  background-color: red; }
+
+.user {
+  text-align: center;
+  width: 50px;
+  height: 50px;
+  position: absolute; }
+
+.user.me {
+  z-index: 999;
+  border: 5px red solid; }
