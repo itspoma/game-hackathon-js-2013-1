@@ -41,13 +41,14 @@ define(function(require, exports, module){
 
             // when a message sent with socket is received
             that.socket.on('message', function (message, callback) {
-                events.dispatch('socket.message', [message, callback])
-                
                 if (typeof message == 'object'
                     && message.hasOwnProperty('event'))
                 {
                     var eventName = message.event;
                     events.dispatch('socket.event '+eventName, message, callback)
+                }
+                else {
+                    events.dispatch('socket.message', [message, callback])
                 }
             })
 

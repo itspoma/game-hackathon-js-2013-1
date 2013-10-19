@@ -123,7 +123,8 @@ body#page-game {
 
         .row {
             clear: both;
-            height: 10px;
+            height: #{$cell_size}px;
+
             .cell {
                 float: left;
                 width: #{$cell_size}px;
@@ -134,20 +135,60 @@ body#page-game {
                 }
 
                 &.cell_b {
-                    background-color: green;
+                    background-color: yellow;
+                    
+                    background-size: #{$cell_size}px;
+                    background-repeat: no-repeat;
+
+                    &.cell_b1 {
+                        background-image: url('https://cdn1.iconfinder.com/data/icons/fatcow/32x32/tree.png');
+                    }
+
+                    &.cell_b2 {
+                        background-image: url('https://cdn1.iconfinder.com/data/icons/New-Year-icons-png/48x48/tree_1.png');
+                    }
+
+                    &.cell_b3 {
+                        background-image: url('https://cdn1.iconfinder.com/data/icons/New-Year-icons-png/48x48/tree_2.png');
+                    }
+
+                    &.cell_b4 {
+                        background-image: url('https://cdn1.iconfinder.com/data/icons/standard-new-year-icons/48/New_Year_Tree.png');
+                    }
+                }
+
+                &.cell_m {
+                    background-color: yellow;
+
+                    background-size: #{$cell_size}px;
+                    background-repeat: no-repeat;
+
+                    background-image: url('https://cdn1.iconfinder.com/data/icons/pidginsmilies/bomb.png');
                 }
             }
         }
 
         .player {
             position: absolute;
-            // @include transition(all, 0.2s, ease-in-out);
-            background-color: red;
+            @include transition(all, 0.5s, ease-in-out);
 
             width: #{$cell_size}px;
             height: #{$cell_size}px;
 
-            border: 1px red solid;
+            background-repeat: no-repeat;
+            background-size: #{$cell_size}px;
+
+            &.player_me {
+                // 
+            }
+
+            &.hero_1 {
+                background-image: url(/img/1.png);
+            }
+
+            &.hero_2 {
+                background-image: url(/img/2.png);
+            }
         }
     }
 }
