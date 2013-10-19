@@ -104,6 +104,11 @@ body#page-game {
       display: none; }
   body#page-game #area {
     background-color: #005700; }
+    body#page-game #area .bullet {
+      width: 3px;
+      height: 15px;
+      background-color: red;
+      position: absolute; }
     body#page-game #area .player {
       position: absolute;
       width: 5px;

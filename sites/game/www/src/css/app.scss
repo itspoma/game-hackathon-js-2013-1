@@ -114,10 +114,16 @@ body#page-game {
     #area {
         $cell_size: 30;
 
+        .bullet{
+              width: 3px;
+              height: 15px;
+              background-color: red;
+              position: absolute;
+        }
+
         .row {
             clear: both;
             height: 10px;
-
             .cell {
                 float: left;
                 width: #{$cell_size}px;
