@@ -21,6 +21,7 @@
 node_modules
 npm-debug.log
 
+game/www/css/*
 test-roman/www/css/*
 
 logs/*
