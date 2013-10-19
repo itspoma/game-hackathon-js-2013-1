@@ -90,6 +90,11 @@ define(function(require, exports, module){
                 that.sock.message({'event':'move', 'direction':'down'})
             })
 
+            keypress.combo("space", function() {
+                Gun.shoot()
+                that.sock.message({'event':'shoot'})
+            })
+
 
             // connecting
             events.addListener(['socket.connecting', 'socket.reconnecting'], function() {
@@ -156,6 +161,27 @@ define(function(require, exports, module){
                     userEl.css({'top':'+='+offset})
                 }
             })
+
+            events.addListener('socket.event user.shoot', function (message, cb) {
+                var userId = message.uid                
+                Gun.shoot(userId)
+            })
+        }
+    }
+
+    Gun = {
+        shoot: function(userId){
+            var $user
+            if(userId === undefined){
+                $user = $('#area #player_me')
+            }else{
+                $user = $('#player_' + userId)
+            }
+            $bullet = $('<div/>')
+                            .addClass('bullet')
+            $('#area').append($bullet)
+            startPoint = {left: $user.offset().left + ($user.width()/2), top: ($user.offset().top - $bullet.height())}
+            $bullet.css('left', startPoint.left).css('top', startPoint.top)
         }
     }
 

@@ -116,6 +116,13 @@ body#page-game {
         // width: 1000px;
         // height: 500px;
 
+        .bullet{
+              width: 3px;
+              height: 15px;
+              background-color: red;
+              position: absolute;
+        }
+
         .player {
             position: absolute;
             // @include transition(all, 0.2s, ease-in-out);

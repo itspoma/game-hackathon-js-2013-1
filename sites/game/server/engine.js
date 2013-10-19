@@ -42,6 +42,10 @@ var M = function() {
         that.ev.on('socket.message.event move', function (message, uid, socket) {
             socket.broadcast.json.send({'event':'user.move', 'uid':uid, 'direction':message.direction})
         })
+
+        that.ev.on('socket.message.event shoot', function (message, uid, socket) {
+            socket.broadcast.json.send({'event':'user.shoot', 'uid':uid})
+        })
     }
 
     that.users = new (function(M) {
