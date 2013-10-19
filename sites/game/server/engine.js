@@ -7,21 +7,18 @@ var M = function() {
         that.config = config
         that.ev = ev
 
+        that.game_area = that.area.generate_empty()
+
         that.bindEvents()
     }
 
     that.bindEvents = function() {
         that.ev.on('socket.connected', function (id, socket) {
             if (true !== that.users.exists(id)) {
-                log(id)
-
                 that.users.add(id)
 
-                log(that.users.getAll())
-
                 socket.json.send({'event':'set', 'params':{
-                    'area.width': that.config.area.width,
-                    'area.height': that.config.area.height,
+                    'area': that.area.toSimple(that.game_area),
                     'me': that.users.getParams(id),
                     'users': that.users.getAll()
                 }})
@@ -44,6 +41,7 @@ var M = function() {
         })
     }
 
+    //
     that.users = new (function(M) {
         var that = this
         
@@ -80,49 +78,74 @@ var M = function() {
             delete that.data[uid]
         }
     })(that)
+
+    //
+    that.area = new (function(M) {
+        var that = this
+        
+        that.M = M
+        that.data = {}
+
+        that.types_separator = ":"
+
+        that.types = {
+            'player': {
+                type: 'player',
+                type_simple: 'p'
+            },
+            'empty': {
+                type: 'empty',
+                type_simple: 'e'
+            },
+            'block': {
+                type: 'block',
+                type_simple: 'b'
+            },
+            'bullet': {
+                type: 'shot',
+                type_simple: 's'
+            }
+        }
+
+        // @return [[..], [..], ..]
+        that.generate_empty = function (uid) {
+            var area = []
+
+            var perc_blocks = 10
+
+            for (var ix = 0; ix < that.M.config.area.height; ix++) {
+                area[ix] = []
+                for (var iy = 0; iy < that.M.config.area.width; iy++) {
+                    var _type = 'empty'
+
+                    if (random(0,100) <= perc_blocks) {
+                        _type = 'block'
+                    }
+
+                    area[ix][iy] = that.types[_type]
+                }
+            }
+
+            return area
+        }
+
+        // @return {separator}row{sep}row{sep}row{sep}...{sep}row
+        that.toSimple = function (arr) {
+            var area = []
+
+            for (var kx in arr) {
+                var area_row = []
+
+                for (var ky in arr[kx]) {
+                    area_row.push(arr[kx][ky].type_simple)
+                }
+
+                area.push(area_row.join(''))
+            }
+
+            return that.types_separator + area.join(that.types_separator)
+        }
+    })(that)
 }
 
 module.exports = new M
-
-
-
-// game.users = new (function() {
-//     var that = this
-
-//     that.users = {}
-
-//     that.add = function(uid, params) {
-//         params.name = random(0,100)
-//         that.users[uid] = params
-//     }
-
-//     that.set = function(uid, params) {
-//         for (var k in that.users) {
-//             if (params.hasOwnProperty(k)) {
-//                 that.users[uid][k] = params[k]
-//             }
-//         }
-//     }
-
-//     that.remove = function(uid) {
-//         delete that.users[uid]
-//     }
-
-//     that.get = function(uid) {
-//         return that.users[uid]
-//     }
-
-//     that.getAll = function() {
-//         return that.users
-//     }
-
-//     that.getCount = function() {
-//         var i = 0
-//         for (var uid in that.users) {
-//             i++
-//         }
-//         return i
-//     }
-// })
-
-// module.exports = game

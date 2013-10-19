@@ -101,7 +101,7 @@ body#page-welcome {
 }
 
 body#page-game {
-    background-color: #E0FFE2;
+    background-color: green;
 
     &.loading {
         background-color: red;
@@ -112,41 +112,36 @@ body#page-game {
     }
 
     #area {
-        background-color: #005700;
-        // width: 1000px;
-        // height: 500px;
+        $cell_size: 30;
+
+        .row {
+            clear: both;
+            height: 10px;
+
+            .cell {
+                float: left;
+                width: #{$cell_size}px;
+                height: #{$cell_size}px;
+
+                &.cell_e {
+                    background-color: yellow;
+                }
+
+                &.cell_b {
+                    background-color: green;
+                }
+            }
+        }
 
         .player {
             position: absolute;
             // @include transition(all, 0.2s, ease-in-out);
+            background-color: red;
 
-            width: 5px;
-            height: 5px;
-
-            background-repeat: no-repeat;
+            width: #{$cell_size}px;
+            height: #{$cell_size}px;
 
             border: 1px red solid;
-
-            &.hero_ericcartman {
-                background-image: url("/img/heros/eric-cartman/1.png");
-                background-size: 100px;
-                width: 100px;
-                height: 100px;
-            }
-
-            &.hero_kylebroflovski {
-                background-image: url("/img/heros/kyle-broflovski/1.png");
-                background-size: 100px;
-                width: 100px;
-                height: 120px;
-            }
-
-            &.hero_stanmarsh {
-                background-image: url("/img/heros/stan-marsh/1.png");
-                background-size: 100px;
-                width: 100px;
-                height: 155px;
-            }
         }
     }
 }

@@ -32,60 +32,88 @@ define(function(require, exports, module){
         }
 
         that.redraw = function () {
-            $('#area').width(that.data['area.width'])
-            $('#area').height(that.data['area.height'])
+            that.redraw_area()
 
             if (that.data.me) {
                 $('#area #player_me').remove()
+
+                    var a = $('#area')
+                                .find('.row').eq(that.data.me.pos.y-1)
+                                .find('.cell').eq(that.data.me.pos.x-1);
+
 
                 $('#area').append(
                     $('<div/>')
                         .attr('id', 'player_me')
                         .addClass('player')
                         .addClass('hero_'+that.data.me.hero)
-                        .css('left', that.data.me.pos.x)
-                        .css('top', that.data.me.pos.y)
+                        .css('left', a.position().left)
+                        .css('top', a.position().top)
                 )
             }
 
-            for (var uid in that.data.users) {
-                if (uid == that.data.me.uid) continue;
+            // for (var uid in that.data.users) {
+            //     if (uid == that.data.me.uid) continue;
 
-                var u = that.data.users[uid]
-                console.log(u)
-                $('#area #player_'+uid).remove()
-                $('#area').append(
-                    $('<div/>')
-                        .attr('id', 'player_'+uid)
-                        .addClass('player')
-                        .addClass('hero_'+u.hero)
-                        .css('left', u.pos.x)
-                        .css('top', u.pos.y)
-                )
+            //     var u = that.data.users[uid]
+
+            //     $('#area #player_'+uid).remove()
+            //     $('#area').append(
+            //         $('<div/>')
+            //             .attr('id', 'player_'+uid)
+            //             .addClass('player')
+            //             .addClass('hero_'+u.hero)
+            //             .css('left', u.pos.x)
+            //             .css('top', u.pos.y)
+            //     )
+            // }
+        }
+
+        that.redraw_area = function () {
+            if (!that.data.area) return
+
+            var types_separator = that.data.area.substr(0,1)
+            var area = that.data.area.substr(1).split(types_separator)
+
+            var area_html = []
+
+            for (var kx in area) {
+                var cells = area[kx].split('')
+
+                area_html.push('<div class="row">')
+                
+                for (var ky in cells) {
+                    area_html.push('<div class="cell cell_'+cells[ky]+'"></div>')
+                }
+
+                area_html.push('</div>')
             }
+
+            $('#area').html(area_html.join(''))
         }
 
         that.bindEvents = function () {
 
-
-            var offset = '60px'
-
             keypress.combo("left", function() {
+                var offset = ($('#player_me').width() + 0) + 'px'
                 $('#area #player_me').css({'left':'-='+offset})
                 that.sock.message({'event':'move', 'direction':'left'})
             })
 
             keypress.combo("right", function() {
+                var offset = ($('#player_me').width() + 0) + 'px'
                 $('#area #player_me').css({'left':'+='+offset})
                 that.sock.message({'event':'move', 'direction':'right'})
             })
 
             keypress.combo("up", function() {
+                var offset = ($('#player_me').width() + 0) + 'px'
                 $('#area #player_me').css({'top':'-='+offset})
                 that.sock.message({'event':'move', 'direction':'up'})
             })
 
             keypress.combo("down", function() {
+                var offset = ($('#player_me').width() + 0) + 'px'
                 $('#area #player_me').css({'top':'+='+offset})
                 that.sock.message({'event':'move', 'direction':'down'})
             })
