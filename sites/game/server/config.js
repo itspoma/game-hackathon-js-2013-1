@@ -6,8 +6,8 @@ config.server_port = 9999
 config.server_resource = "s"
 
 config.area = {
-    width: 1000,
-    height: 500
+    width: 35,
+    height: 20
 }
 
 
