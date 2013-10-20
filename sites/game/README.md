@@ -5,7 +5,7 @@
 --
 
 **20.10.2013 evening**
-![Alt text](http://new.tinygrab.com/7020c0e8b029bf525024ddc07ae5cfbdea1c201e9e.png)
+![](http://new.tinygrab.com/7020c0e8b029bf525024ddc07ae5cfbdea1c201e9e.png)
 
 --
 
