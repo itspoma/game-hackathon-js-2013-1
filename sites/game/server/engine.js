@@ -21,7 +21,10 @@ var M = function() {
                 socket.json.send({'event':'set', 'params':{
                     'area': that.area.toSimple(),
                     'me': uid,
-                    'users': that.users.getAll()
+                    'users': that.users.getAll(),
+                    'settings': {
+                        player: that.config.player
+                    }
                 }})
                 socket.json.send({'event':'redraw'})
 

@@ -170,7 +170,7 @@ body#page-game {
 
         .player {
             position: absolute;
-            @include transition(all, 0.5s, ease-in-out);
+            @include transition(all, 0.1s, ease-in-out);
 
             width: #{$cell_size}px;
             height: #{$cell_size}px;

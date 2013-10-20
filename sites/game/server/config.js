@@ -10,5 +10,9 @@ config.area = {
     height: 20
 }
 
+config.player = {
+    fps: 200
+}
+
 
 module.exports = config

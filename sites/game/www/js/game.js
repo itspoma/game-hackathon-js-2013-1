@@ -178,7 +178,7 @@ define(function(require, exports, module){
                 var player = 'me' === who ? that.getMe() : that.getPlayer(who)
 
                 if ('me' === who && player.data.lastMove) {
-                    if (timeNow - player.data.lastMove < 500) {
+                    if (timeNow - player.data.lastMove < that.M.data.settings.player.fps) {
                         return false
                     }
                 }
