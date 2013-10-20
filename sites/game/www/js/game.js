@@ -59,6 +59,16 @@ define(function(require, exports, module){
                 that.redraw()
             })
 
+            // redraw user
+            events.addListener('socket.event redraw.user', function (message, cb) {
+                that.users.redraw()
+            })
+
+            // redraw area
+            events.addListener('socket.event redraw.area', function (message, cb) {
+                that.area.redraw()
+            })
+
             // user.connected
             events.addListener('socket.event user.connected', function (message, cb) {
                 that.users.add(message.user)
@@ -109,9 +119,24 @@ define(function(require, exports, module){
 
             // on dead
             events.addListener('socket.event user.dead', function (message, cb) {
-                alert('dead')
-                // var userId = message.uid                
-                // Gun.shoot(userId)
+                if (message.uid == that.data.me) {
+                    log('you dead')
+                }
+                else {
+                    that.area.setCell(message.pos.x, message.pos.y, 'player')
+                    log('user '+message.uid+' dead')
+                }
+            })
+
+            // on bonus
+            events.addListener('socket.event user.bonus', function (message, cb) {
+                if (message.uid == that.data.me) {
+                    log('you get bonus')
+                }
+                else {
+                    that.area.setCell(message.pos.x, message.pos.y, 'player')
+                    log('user '+message.uid+' get bonus')
+                }
             })
         }
 
@@ -125,7 +150,7 @@ define(function(require, exports, module){
                 that.M.data.users[user.uid] = user;
 
                 var isMe = that.getMe().data.uid === user.uid
-                var cellEl = that.M.area.getCell(user.pos.x, user.pos.y)
+                var cellEl = that.M.area.getCell(user.pos.x, user.pos.y).el
 
                 var el = $('<div/>')
                             .attr('id', 'player_'+user.uid)
@@ -135,11 +160,18 @@ define(function(require, exports, module){
                             .css('left', cellEl.position().left)
                             .css('top', cellEl.position().top)
 
-                $('#area').append(el)
+                $('#area #users').append(el)
+
+                that.M.area.setCell(user.pos.x, user.pos.y, 'player')
             }
 
             that.remove = function (user) {
-                that.getPlayer(user.uid).el.remove()
+                if (true !== this.exists(user.uid)) return
+
+                var player = that.getPlayer(user.uid)
+
+                player.el.remove()
+                that.M.area.setCell(player.data.pos.x, player.data.pos.y, 'e')
             }
 
             that.redraw = function () {
@@ -147,29 +179,18 @@ define(function(require, exports, module){
                     var isMe = that.getMe().data.uid === uid
                     var player = that.getPlayer(uid)
 
-                    var cellEl = that.M.area.getCell(player.data.pos.x, player.data.pos.y)
-
-                    that.remove(player.data.uid)
+                    player.data && that.remove(player.data.uid)
 
                     that.add(player.data)
                 }
             }
 
             that.canMove = function(toX, toY) {
-                var area = that.M.area.getAreaArray()
+                var cell = that.M.area.getCell(toX, toY).data
 
-                var areaRow = area[toY-1]
-                if (typeof areaRow == 'undefined') {
-                    return false
-                }
-
-                var areaCell = areaRow[toX-1]
-                if (typeof areaCell == 'undefined') {
-                    return false
-                }
-
-                return (areaCell == 'e') // empty
-                    || (areaCell == 'm') // bomb
+                return (cell == 'e') // empty
+                    || (cell == 'm') // bomb
+                    || (cell == 'o') // bonus
             }
 
             that.move = function (who, direction) {
@@ -198,6 +219,11 @@ define(function(require, exports, module){
                 if (true !== that.canMove(newCoords.x, newCoords.y)) {
                     return false
                 }
+
+                player.el.attr('direction', direction)
+
+                that.M.area.setCell(oldCoords.x, oldCoords.y, 'e')
+                that.M.area.setCell(newCoords.x, newCoords.y, 'player')
 
                 if ('me' === who) {
                     that.M.data.users[that.M.data.me].pos.x = newCoords.x
@@ -232,9 +258,13 @@ define(function(require, exports, module){
 
             that.getPlayer = function (uid) {
                 return {
-                    el: $('#area #player_'+uid),
+                    el: $('#area #users #player_'+uid),
                     data: that.M.data.users && that.M.data.users[uid]
                 }
+            }
+
+            that.exists = function (uid) {
+                return 'undefined' !== typeof that.getPlayer(uid).data
             }
 
             that.getAll = function () {
@@ -248,31 +278,11 @@ define(function(require, exports, module){
             
             that.M = Module
 
-            that.redraw = function() {
-                var area = that.getAreaArray()
-
-                var area_html = []
-
-                for (var kx in area) {
-                    var cells = area[kx]
-
-                    area_html.push('<div class="row">')
-                    
-                    for (var ky in cells) {
-                        var _class = 'cell cell_'+cells[ky];
-                        if (cells[ky] == 'b') {
-                            _class += ' cell_b'+random(1,4);
-                        }
-                        area_html.push('<div class="'+_class+'"></div>')
-                    }
-
-                    area_html.push('</div>')
-                }
-
-                $('#area').html(area_html.join(''))
+            that.init = function() {
+                that.M.data.areaArray = that.convertAreaArray()
             }
 
-            that.getAreaArray = function () {
+            that.convertAreaArray = function () {
                 if (!that.M.data.area) return []
 
                 var types_separator = that.M.data.area.substr(0,1)
@@ -285,12 +295,51 @@ define(function(require, exports, module){
                 return area
             }
 
+            that.getAreaArray = function () {
+                return that.M.data.areaArray
+            }
+
+            that.redraw = function() {
+                that.init()
+
+                var area = that.M.data.areaArray
+
+                var area_html = []
+
+                for (var kx in area) {
+                    var cells = area[kx]
+
+                    area_html.push('<div class="row">')
+                    
+                    for (var ky in cells) {
+                        var _class = 'cell cell_'+cells[ky];
+                        if (cells[ky] == 'b') {
+                            _class += ' cell_b1'//+random(1,4);
+                        }
+                        area_html.push('<div class="'+_class+'"></div>')
+                    }
+
+                    area_html.push('</div>')
+                }
+
+                $('#area #table').html(area_html.join(''))
+            }
+
             that.getCell = function (x, y) {
-                var el = $('#area')
+                var el = $('#area #table')
                     .find('.row').eq(y-1)
                     .find('.cell').eq(x-1)
 
-                return el
+                return {
+                    data: that.M.data.areaArray[y-1][x-1],
+                    el: el
+                }
+            }
+
+            that.setCell = function (x,y, type) {
+                that.M.data.areaArray[y-1][x-1] = type
+
+                that.getCell(x,y).el.attr('class', 'cell cell_'+type)
             }
         })(that)
     }
@@ -299,13 +348,13 @@ define(function(require, exports, module){
         shoot: function(userId){
             var $user
             if(userId === undefined){
-                $user = $('#area #player_me')
+                $user = $('#area #users #player_me')
             }else{
                 $user = $('#player_' + userId)
             }
             $bullet = $('<div/>')
                             .addClass('bullet')
-            $('#area').append($bullet)
+            $('#area #table').append($bullet)
             startPoint = {left: $user.offset().left + ($user.width()/2), top: ($user.offset().top - $bullet.height())}
             $bullet.css('left', startPoint.left).css('top', startPoint.top)
         }

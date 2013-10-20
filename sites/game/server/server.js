@@ -49,7 +49,9 @@ for (var k in routes.map) {
 
 //
 
-require('./engine.js').init(config, ev)
+require('./engine.js')
+  .set('io', io)
+  .init(config, ev)
 
 io.sockets.on('connection', function (socket) {
     var uid = (socket.id).toString()

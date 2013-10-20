@@ -1,15 +1,26 @@
 var M = function() {
     var that = this
 
+    that.data = {}
+
     that.init = function(config, ev) {
         log('engine init')
-        
+
         that.config = config
         that.ev = ev
 
         that.area.init()
 
         that.bindEvents()
+
+        return that
+    }
+
+    //
+    that.set = function (name, value) {
+        that.data[name] = value
+
+        return that
     }
 
     that.bindEvents = function() {
@@ -47,16 +58,14 @@ var M = function() {
         that.ev.on('socket.message.event move', function (message, uid, socket) {
             socket.broadcast.json.send({'event':'user.move', 'uid':uid, 'direction':message.direction})
 
-            var _move = that.users.move(uid, message.direction)
+            var moved = that.users.move(uid, message.direction)
 
-            if ('bomb' == _move) {
-                socket.json.send({'event':'user.dead', 'uid':uid})
-                socket.broadcast.json.send({'event':'user.dead', 'uid':uid})
+            if ('bomb' == moved.toCell) {
+                that.data['io'].sockets.json.send({'event':'user.dead', 'uid':uid, 'pos':{x:moved.toX, y:moved.toY}})
+            }
 
-                socket.json.send({'event':'set', 'params':{
-                    'area': that.area.toSimple()
-                }})
-                socket.json.send({'event':'redraw'})
+            if ('bonus' == moved.toCell) {
+                that.data['io'].sockets.json.send({'event':'user.bonus', 'uid':uid, 'pos':{x:moved.toX, y:moved.toY}})
             }
         })
 
@@ -65,6 +74,38 @@ var M = function() {
             socket.broadcast.json.send({'event':'user.shoot', 'uid':uid})
         })
     }
+
+    //
+    that.heroes = new (function(M) {
+        var that = this
+
+        that.M = M
+        that.data = {}
+
+        that.heroes = {
+            'eric_cartman': {
+                'id': 'eric_cartman'
+            },
+            'kyle_broflovski': {
+                'id': 'kyle_broflovski'
+            },
+            'kenny_mccormick': {
+                'id': 'kenny_mccormick'
+            },
+            'leopold_butters_stotch': {
+                'id': 'leopold_butters_stotch'
+            },
+            'tank1': {
+                'id': 'tank1'
+            }
+        }
+
+        that.getRandom = function () {
+            var heroesArr = keys(that.heroes)
+            return that.heroes[heroesArr[random(0,heroesArr.length-1)]]
+        }
+
+    })(that)
 
     //
     that.users = new (function(M) {
@@ -76,15 +117,14 @@ var M = function() {
         that.add = function (uid) {
             log('add user:', uid)
 
+            var _hero = that.M.heroes.getRandom()
+            var _pos = that.M.area.getFreeCell()
+
             that.data[uid] = {
                 uid: uid,
                 name: uid,
-                // hero: ['ericcartman', 'kylebroflovski', 'stanmarsh'][random(0,2)],
-                hero: ['1', '2'][random(0,1)],
-                pos: {
-                    x: random(0, that.M.config.area.width),
-                    y: random(0, that.M.config.area.height)
-                }
+                hero: _hero.id,
+                pos: _pos
             }
         }
 
@@ -122,10 +162,19 @@ var M = function() {
 
             var cell = that.M.area.getCell(newCoords.x, newCoords.y)
 
-            if (cell.type == 'bomb') {
-                that.M.area.setCell(newCoords.x, newCoords.y, 'empty')
-                return 'bomb'
+            var _return = {
+                toX: newCoords.x,
+                toY: newCoords.y,
+                toCell: cell.type
             }
+
+            if (cell.type == 'bomb'
+                || cell.type == 'bonus')
+            {
+                that.M.area.setCell(newCoords.x, newCoords.y, 'empty')
+            }
+
+            return _return
         }
     })(that)
 
@@ -155,6 +204,10 @@ var M = function() {
                 type: 'bomb',
                 type_simple: 'm'
             },
+            'bonus': {
+                type: 'bonus',
+                type_simple: 'o'
+            },
             'bullet': {
                 type: 'shot',
                 type_simple: 's'
@@ -169,8 +222,9 @@ var M = function() {
         that.generate_empty = function (uid) {
             var area = []
 
-            var perc_blocks = 10
-            var perc_mines = 5
+            var perc_blocks = 5
+            var perc_mines = 3
+            var perc_bonus = 2
 
             for (var ix = 0; ix < that.M.config.area.height; ix++) {
                 area[ix] = []
@@ -183,6 +237,10 @@ var M = function() {
 
                     if (random(0,100) <= perc_mines) {
                         _type = 'bomb'
+                    }
+
+                    if (random(0,100) <= perc_bonus) {
+                        _type = 'bonus'
                     }
 
                     area[ix][iy] = that.types[_type]
@@ -210,7 +268,39 @@ var M = function() {
         }
 
         //
+        that.getFreeCell = function () {
+            var _pos = null
+
+            var _while = 0
+            while (!_pos) {
+                if (++_while >= 50) break
+
+                var _x = random(0, that.M.config.area.width)
+                var _y = random(0, that.M.config.area.height)
+
+                var cell = that.getCell(_x, _y)
+
+                if ('empty' == cell.type) {
+                    _pos = {
+                        x: _x,
+                        y: _y
+                    }
+                }
+            }
+
+            return _pos
+        }
+
+        //
         that.getCell = function (x,y) {
+            if (!that.game_area) {
+                return {}
+            }
+
+            if (typeof that.game_area[y-1] == 'undefined') {
+                return {}
+            }
+
             return that.game_area[y-1][x-1]
         }
 

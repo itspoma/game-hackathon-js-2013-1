@@ -1,6 +1,7 @@
 var config = require('./config.js')
   , colors = require('colors')
 
+//
 global.log = function() {
     if (!config.debug) return
 
@@ -21,6 +22,18 @@ global.log = function() {
     // config.debug && console.log.apply(console, arguments)
 }
 
+//
 global.random = function (min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min
+}
+
+//
+global.keys = function (v) {
+    var keys = [];
+
+    for(var i in v) if (v.hasOwnProperty(i)) {
+        keys.push(i);
+    }
+
+    return keys;
 }

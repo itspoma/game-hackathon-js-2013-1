@@ -11,6 +11,10 @@
     font: 15px verdana;
 }
 
+body.loading {
+    background-color: red
+}
+
 body#page-welcome {
     @include transition(all, 0.2s, ease-in-out);
     background-color: #B5E4FF;
@@ -112,7 +116,7 @@ body#page-game {
     }
 
     #area {
-        $cell_size: 30;
+        $cell_size: 40;
 
         .bullet{
               width: 3px;
@@ -134,36 +138,50 @@ body#page-game {
                     background-color: yellow;
                 }
 
-                &.cell_b {
+                // bonus
+                &.cell_o {
+                    // background-color: blue;
+
                     background-color: yellow;
                     
                     background-size: #{$cell_size}px;
                     background-repeat: no-repeat;
+                    background-image: url('https://cdn3.iconfinder.com/data/icons/fatcow/32x32_0760/ruby.png');
+                }
 
-                    &.cell_b1 {
-                        background-image: url('https://cdn1.iconfinder.com/data/icons/fatcow/32x32/tree.png');
-                    }
+                &.cell_b {
+                    // background-color: green;
+                    background-color: yellow;
+                    
+                    background-size: #{$cell_size}px;
+                    background-repeat: no-repeat;
+                    background-image: url('https://cdn1.iconfinder.com/data/icons/fatcow/32x32/tree.png');
 
-                    &.cell_b2 {
-                        background-image: url('https://cdn1.iconfinder.com/data/icons/New-Year-icons-png/48x48/tree_1.png');
-                    }
+                    // &.cell_b1 {
+                        // background-image: url('https://cdn1.iconfinder.com/data/icons/fatcow/32x32/tree.png');
+                    // }
 
-                    &.cell_b3 {
-                        background-image: url('https://cdn1.iconfinder.com/data/icons/New-Year-icons-png/48x48/tree_2.png');
-                    }
+                    // &.cell_b2 {
+                    //     background-image: url('https://cdn1.iconfinder.com/data/icons/New-Year-icons-png/48x48/tree_1.png');
+                    // }
 
-                    &.cell_b4 {
-                        background-image: url('https://cdn1.iconfinder.com/data/icons/standard-new-year-icons/48/New_Year_Tree.png');
-                    }
+                    // &.cell_b3 {
+                    //     background-image: url('https://cdn1.iconfinder.com/data/icons/New-Year-icons-png/48x48/tree_2.png');
+                    // }
+
+                    // &.cell_b4 {
+                    //     background-image: url('https://cdn1.iconfinder.com/data/icons/standard-new-year-icons/48/New_Year_Tree.png');
+                    // }
                 }
 
                 &.cell_m {
+                    // background-color: red;
                     background-color: yellow;
 
                     background-size: #{$cell_size}px;
                     background-repeat: no-repeat;
 
-                    background-image: url('https://cdn1.iconfinder.com/data/icons/pidginsmilies/bomb.png');
+                    background-image: url('https://cdn3.iconfinder.com/data/icons/pidginsmilies/poop.png');
                 }
             }
         }
@@ -182,29 +200,24 @@ body#page-game {
                 // 
             }
 
-            &.hero_1 {
-                background-image: url(/img/1.png);
+            $dirdeg: ('up' 0) ('right' 90) ('down' 180) ('left' 270);
+            @each $var in $dirdeg {
+                $dir: nth($var, 1);
+                $deg: nth($var, 2);
+
+                &#{'[direction="'+$dir+'"]'} {
+                    -webkit-transform: rotate(#{$deg}deg)
+                }
             }
 
-            &.hero_2 {
-                background-image: url(/img/2.png);
+            $heroes: 'eric_cartman' 'kyle_broflovski' 'kenny_mccormick'
+                     'leopold_butters_stotch' 'tank1';
+
+            @each $hero in $heroes {
+                &.hero_#{$hero} {
+                    background-image: url(/img/heroes/#{$hero}/static.png);
+                }
             }
         }
     }
-}
-
-
-
-body.loading {
-    background-color: red
-}
-.user {
-    text-align: center;
-    width: 50px;
-    height: 50px;
-    position: absolute;
-}
-.user.me {
-    z-index: 999;
-    border: 5px red solid;
 }

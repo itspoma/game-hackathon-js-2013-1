@@ -49,7 +49,15 @@ define("app", function(require, exports, module) {
 require(["jquery", "google-font"]);
 
 log = function() {
-    (console.isDebug && true) && (console && console.log.apply(console, arguments))
+    if (console.isDebug && true) {
+        console && console.log.apply(console, arguments);
+        
+        var t = $('textarea#log')
+        for (var k in arguments) {
+            t.append(arguments[k]+"\n")
+        }
+        t[0].scrollTop = t[0].scrollHeight;
+    }
 }
 
 random = function (min, max) {
