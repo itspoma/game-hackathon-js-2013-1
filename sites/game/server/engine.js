@@ -30,7 +30,7 @@ var M = function() {
                 that.users.add(uid)
 
                 socket.json.send({'event':'set', 'params':{
-                    'area': that.area.toSimple(),
+                    'area': that.area.toSimplePacked(),
                     'me': uid,
                     'users': that.users.getAll(),
                     'settings': {
@@ -186,6 +186,7 @@ var M = function() {
         that.data = {}
 
         that.types_separator = ':'
+        that.packed_separator = '@'
 
         that.types = {
             'player': {
@@ -264,7 +265,39 @@ var M = function() {
                 area.push(area_row.join(''))
             }
 
-            return that.types_separator + area.join(that.types_separator)
+            var simpleArea = that.types_separator + area.join(that.types_separator)
+
+            return simpleArea
+        }
+
+        // @return packet version of map for user
+        that.toSimplePacked = function () {
+            var simpleArea = that.toSimple()
+
+            var sep = that.packed_separator
+
+            // pack
+            for (var k in that.types) {
+                var v = that.types[k]
+
+                // bbbb => !b3
+                // bbb => bbb
+                simpleArea = simpleArea.replace(new RegExp('['+v.type_simple+']{4,}', 'g'), function(m) {
+                    var m_packed = sep + m.substr(0,1) + m.length + sep
+                    var isProfitably = m_packed.length < m.length
+
+                    if (isProfitably) {
+                        return m_packed
+                    }
+                    else {
+                        return m
+                    }
+                })
+            }
+
+            simpleArea = sep + simpleArea
+
+            return simpleArea
         }
 
         //

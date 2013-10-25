@@ -285,14 +285,27 @@ define(function(require, exports, module){
             that.convertAreaArray = function () {
                 if (!that.M.data.area) return []
 
-                var types_separator = that.M.data.area.substr(0,1)
-                var area = that.M.data.area.substr(1).split(types_separator)
+                var areaSimple = that.unpackArea(that.M.data.area)
+
+                var separator = areaSimple.substr(0,1)
+                var area = areaSimple.substr(1).split(separator)
 
                 for (var kx in area) {
                     area[kx] = area[kx].split('')
                 }
 
                 return area
+            }
+
+            that.unpackArea = function (area) {
+                var separator = area.substr(0,1)
+                var areaPacked = area.substr(1)
+
+                var areaUnpacked = areaPacked.replace(/@(\w)(\d+)@/g, function(m,a,b) {
+                    return Array(parseInt(b)+1).join(a)
+                })
+
+                return areaUnpacked
             }
 
             that.getAreaArray = function () {
