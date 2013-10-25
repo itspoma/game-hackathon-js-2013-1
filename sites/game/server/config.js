@@ -7,11 +7,13 @@ config.server_resource = "s"
 
 config.area = {
     width: 30,
-    height: 15
+    height: 5
 }
 
 config.player = {
-    fps: 200
+    move_ps: 100,
+    shoot_ps: 200,
+    shoot_max_alive: 5
 }
 
 

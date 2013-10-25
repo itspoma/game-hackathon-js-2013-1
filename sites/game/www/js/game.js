@@ -113,15 +113,37 @@ define(function(require, exports, module){
             // }, true)
 
             keypress.combo('space', function() {
-                if (true == that.users.shoot('me')) {
-                    // that.sock.message({'event':'shoot'})
+                var _direction = that.users.getMe().el.attr('direction') || 'up'
+
+                if (true == that.users.shoot('me', _direction)) {
+                    that.sock.message({'event':'shoot', 'direction':_direction})
+                }
+            })
+
+            // on shoot
+            events.addListener('user.kill', function (uid) {
+                that.sock.message({'event':'user.kill', 'uid':uid})
+            })
+
+            //
+            events.addListener('socket.event user.kill', function (message, cb) {
+                var killer = message.killer
+                var killed = message.killed
+
+                var isKilledMe = that.users.getMe().data.uid === killed
+
+                if (isKilledMe) {
+                    // alert('you were killed!')
+                    location.reload()
                 }
             })
 
             // on shoot
             events.addListener('socket.event user.shoot', function (message, cb) {
-                // var userId = message.uid                
-                // Gun.shoot(userId)
+                var uid = message.uid
+                var direction = message.direction
+
+                that.users.shoot(uid, direction)
             })
 
             // on dead
@@ -204,7 +226,7 @@ define(function(require, exports, module){
                 var player = 'me' === who ? that.getMe() : that.getPlayer(who)
 
                 if ('me' === who && player.data.lastMove) {
-                    if (timeNow - player.data.lastMove < that.M.data.settings.player.fps) {
+                    if (timeNow - player.data.lastMove < that.M.data.settings.player.move_ps) {
                         return false
                     }
                 }
@@ -264,30 +286,42 @@ define(function(require, exports, module){
             }
 
             that.shoot = function (who, direction) {
-                var user = 'me' === who ? that.getMe() : that.getPlayer(who)
+                var timeNow = (new Date()).getTime()
 
-                if ('me' === who) {
-                    direction = user.el.attr('direction') || 'up'
+                var player = 'me' === who ? that.getMe() : that.getPlayer(who)
+
+                if ('me' === who && player.data.lastShoot) {
+                    if (timeNow - player.data.lastShoot < that.M.data.settings.player.shoot_ps) {
+                        return false
+                    }
+
+                    if (that.getShoots(player.data.uid).length >= that.M.data.settings.player.shoot_max_alive) {
+                        return false
+                    }
                 }
 
-                var userSize = (user.el.width() + 0)
+                // shoot_max_alive
+
+                var userSize = (player.el.width() + 0)
                 var shootSize = 5;
 
-                var cellEl = that.M.area.getCell(user.data.pos.x, user.data.pos.y).el
+                var cellEl = that.M.area.getCell(player.data.pos.x, player.data.pos.y).el
 
                 var el = $('<div/>')
                             .addClass('shoot')
-                            .addClass('shoot_'+user.data.uid)
+                            .addClass('shoot_'+player.data.uid)
                             .css('left', cellEl.position().left + userSize/2 - shootSize/2)
                             .css('top', cellEl.position().top + userSize/2 - shootSize/2)
-                            .data('x', user.data.pos.x)
-                            .data('y', user.data.pos.y)
+                            .data('x', player.data.pos.x)
+                            .data('y', player.data.pos.y)
 
                 $('#area #actions').append(el)
 
-                that.shootStartMove(user, el, direction)
+                that.M.data.users[that.M.data.me].lastShoot = timeNow
 
-                return false
+                that.shootStartMove(player, el, direction)
+
+                return true
             }
 
             that.shootStartMove = function (user, el, direction) {
@@ -318,20 +352,24 @@ define(function(require, exports, module){
                 var _y = parseInt(el.data('y')) + moveOpt.pos.y
 
                 var cell = that.M.area.getCell(_x, _y)
+                var cell_user = that.M.users.getPlayerByPos(_x,_y)
 
-                if (cell.type && !cell.type.canmove
-                    && that.M.users.getPlayerByPos(_x,_y).isMe != true
-                ) {
-                    el.fadeOut('fast', function(){$(this).remove()})
-                    return
-                }
+                var shootDead = false
+                    shootDead = cell.type && !cell.type.canmove
+                    // shootDead = cell_user ? cell_user.isMe != true : shootDead
 
                 var isOut = _x <= 0;
                     isOut = isOut || _x > that.M.area.getSize().width;
                     isOut = isOut || _y <= 0;
                     isOut = isOut || _y > that.M.area.getSize().height;
 
-                if (isOut) {
+                if (isOut) shootDead = true
+
+                if (shootDead) {
+                    if (cell_user && !cell_user.isMe) {
+                        events.dispatch('user.kill', cell_user.data.uid)
+                    }
+
                     el.fadeOut('fast', function(){$(this).remove()})
                     return
                 }
@@ -347,6 +385,10 @@ define(function(require, exports, module){
                         that.shootStartMove(user, el, direction)
                     // }, 100)
                 })
+            }
+
+            that.getShoots = function (uid) {
+                return $('#area #actions .shoot_'+uid);
             }
 
             that.getMe = function () {

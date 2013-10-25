@@ -73,8 +73,13 @@ var M = function() {
 
         // on user shoot
         that.ev.on('socket.message.event shoot', function (message, uid, socket) {
-            socket.broadcast.json.send({'event':'user.shoot', 'uid':uid})
+            socket.broadcast.json.send({'event':'user.shoot', 'uid':uid, 'direction':message.direction})
         })
+
+        //
+        that.ev.on('socket.message.event user.kill', function (message, uid, socket) {
+            socket.broadcast.json.send({'event':'user.kill', 'killer':uid, 'killed':message.uid})
+        })   
     }
 
     //
