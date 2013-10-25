@@ -29,13 +29,15 @@ var M = function() {
             if (true !== that.users.exists(uid)) {
                 that.users.add(uid)
 
+                // @todo: send few events in one response
                 socket.json.send({'event':'set', 'params':{
                     'area': that.area.toSimplePacked(),
+                    'cell_types': that.area.getCellTypes(),
                     'me': uid,
                     'users': that.users.getAll(),
                     'settings': {
                         player: that.config.player
-                    }
+                    },
                 }})
                 socket.json.send({'event':'redraw'})
 
@@ -191,7 +193,8 @@ var M = function() {
         that.types = {
             'player': {
                 type: 'player',
-                type_simple: 'p'
+                type_simple: 'p',
+                u_can_move_through: false
             },
             'empty': {
                 type: 'empty',
@@ -199,7 +202,8 @@ var M = function() {
             },
             'block': {
                 type: 'block',
-                type_simple: 'b'
+                type_simple: 'b',
+                u_can_move_through: false
             },
             'bomb': {
                 type: 'bomb',
@@ -340,6 +344,31 @@ var M = function() {
         //
         that.setCell = function (x,y, type) {
             that.game_area[y-1][x-1] = that.types[type]
+        }
+
+        // @return: {a: {}, b:{}, ..}
+        that.getCellTypes = function () {
+            // sf : map small <=> full
+            // fs : map full <=> full
+            var types = {sf:{}, fs:{}}
+
+            for (var k in that.types) {
+                var v = that.types[k]
+
+                var _sf_p = {
+                    stype: v.type_simple,
+                    type: v.type
+                }
+                if ((v.u_can_move_through&&true) == false) {
+                    _sf_p.canmove = false
+                }
+                
+                types.sf[v.type_simple] = _sf_p
+
+                types.fs[v.type] = v.type_simple
+            }
+
+            return types
         }
     })(that)
 }

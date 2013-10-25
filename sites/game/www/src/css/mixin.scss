@@ -24,9 +24,9 @@
 
 @mixin box-shadow($inset) {
      -webkit-box-shadow: $inset;
-        -moz-box-shadow: $inset;
       -ms-border-radius: $inset;
        -o-border-radius: $inset;
+        -moz-box-shadow: $inset;
              box-shadow: $inset;
 }
 

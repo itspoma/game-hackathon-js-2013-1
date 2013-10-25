@@ -18,7 +18,6 @@ define(function(require, exports, module){
                 that.events[eventName] = []
             }
 
-            log("add event: "+eventName)
             that.events[eventName].push(callback)
 
             return that
@@ -75,9 +74,9 @@ define(function(require, exports, module){
                 return;
             }
 
-            log("dispatch event: "+eventName)
-
             var _eventFuncs = that.events[eventName];
+
+            log('dispatch ' + _eventFuncs.length + ' event: '+eventName)
 
             for (var _i in _eventFuncs) {
                 _eventFuncs[_i](data);

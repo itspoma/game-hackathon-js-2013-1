@@ -23,20 +23,21 @@ require.config({
             "//cdn.socket.io/stable/socket.io"
         ],
         'jquery': "//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min",
+        'jquery-rotate': '//www.xiper.net/examples/js-plugins/effects/jqueryrotate/js/jqueryrotate.2.1',
         'google-font': "//ajax.googleapis.com/ajax/libs/webfont/1/webfont",
         'keypress': '/js/lib/keypress'
     }
 })
 
 define("app", function(require, exports, module) {
-    var pages = require("pages");
+    var pages = require("pages")
 
     var config = module.config()
 
     console.isDebug = config.debug
 
     var pageName = document.getElementsByTagName('body')[0].id.replace('page-', '')
-    var page = pages[pageName];
+    var page = pages[pageName]
 
     if ('undefined' == typeof page) {
         window.location = '/'
@@ -44,19 +45,22 @@ define("app", function(require, exports, module) {
     }
 
     page.init()
-});
+})
 
-require(["jquery", "google-font"]);
+;require(["jquery", "google-font"]);
 
 log = function() {
     if (console.isDebug && true) {
-        console && console.log.apply(console, arguments);
-        
-        var t = $('textarea#log')
-        for (var k in arguments) {
-            t.append(arguments[k]+"\n")
+        var args = arguments
+
+        for (var k in args) {
+            // convert 'string' to 'array' to prevent shit in console
+            if (typeof args[k] == 'string' && args[k].length >= 50) {
+                args[k] = [args[k]]
+            }
         }
-        t[0].scrollTop = t[0].scrollHeight;
+
+        console && console.log.apply(console, args)
     }
 }
 

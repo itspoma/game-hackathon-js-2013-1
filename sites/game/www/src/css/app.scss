@@ -19,87 +19,90 @@ body#page-welcome {
     @include transition(all, 0.2s, ease-in-out);
     background-color: #B5E4FF;
 
-    .hero {
-        position: fixed;
-        z-index: 1;
+    // .hero {
+    //     position: fixed;
+    //     z-index: 1;
 
-        &.cartman {
-            bottom: -23px;
-        }
+    //     &.cartman {
+    //         bottom: -23px;
+    //     }
 
-        &.homer {
-            bottom: -10px;
-            right: 210px;
-        }
+    //     &.homer {
+    //         bottom: -10px;
+    //         right: 210px;
+    //     }
 
-        &.bender {
-            width: 400px;
-            left: 250px;
-            bottom: -150px;
-        }
+    //     &.bender {
+    //         width: 400px;
+    //         left: 250px;
+    //         bottom: -150px;
+    //     }
 
-        &.peter {
-            right: 150px;
-            top: 50px;
-        }
+    //     &.peter {
+    //         right: 150px;
+    //         top: 50px;
+    //     }
 
-        &.stan_smith {
-            right: -30px;
-            bottom: 0px;
-        }
+    //     &.stan_smith {
+    //         right: -30px;
+    //         bottom: 0px;
+    //     }
 
-        &.patrik {
-            left: 140px;
-            top: 0px;
-        }
+    //     &.patrik {
+    //         left: 140px;
+    //         top: 0px;
+    //     }
 
-        &.johnny_bravo {
-            width: 200px;
-            left: 0px;
-        }
+    //     &.johnny_bravo {
+    //         width: 200px;
+    //         left: 0px;
+    //     }
 
-        &.cow {
-            width: 150px;
-            left: -5px;
-            top: 36%;
-        }
+    //     &.cow {
+    //         width: 150px;
+    //         left: -5px;
+    //         top: 36%;
+    //     }
 
-        &.arnold {
-            width: 200px;
-            top: 10px;
-            right: 10px;
-        }
+    //     &.arnold {
+    //         width: 200px;
+    //         top: 10px;
+    //         right: 10px;
+    //     }
 
-        &.real_monsters {
-            width: 230px;
-            top: 0px;
-            left: 42%;
-        }
-    }
+    //     &.real_monsters {
+    //         width: 230px;
+    //         top: 0px;
+    //         left: 42%;
+    //     }
+    // }
 
     #play {
         z-index: 999;
 
         @include center(250, 120);
-        @include border-radius(10px);
+        @include border-radius(3px);
 
+        cursor: pointer;
+        text-align: center;
+        background: #557BAA;
+        color: #FFF;
+        clear: both;
         font-size: 100px;
         font-family: 'Poiret One', sans-serif;
-        background: #D5EDFF;
-        color: #1575AC;
-        cursor: pointer;
         padding: 10px;
-        text-align: center;
 
-        @include box-shadow(0 10px 15px -3px #1581A3);
-        @include transition(all, 0.2s, ease-in-out);
+        @include box-shadow(0 15px 10px -3px #879ECF);
+
+        @include transition(all, 200ms, ease-out);
 
         &:hover {
-            @include box-shadow(0 10px 25px #1581A3);
+            background-color: #3163A3;
+            @include box-shadow(0 10px 10px -3px #6D8FB9);
         }
 
         &:active {
-            @include box-shadow(2px 2px 2px rgba(155, 155, 155, 0.28) inset);
+            @include box-shadow(0 10px 20px -3px #6D8FB9);
         }
     }
 }
@@ -118,12 +121,12 @@ body#page-game {
     #area {
         $cell_size: 40;
 
-        .bullet{
-              width: 3px;
-              height: 15px;
-              background-color: red;
-              position: absolute;
-        }
+        // .bullet{
+        //       width: 3px;
+        //       height: 15px;
+        //       background-color: red;
+        //       position: absolute;
+        // }
 
         .row {
             clear: both;
@@ -134,28 +137,18 @@ body#page-game {
                 width: #{$cell_size}px;
                 height: #{$cell_size}px;
 
-                &.cell_e {
+                &.cell_empty {
                     background-color: yellow;
                 }
 
-                // bonus
-                &.cell_o {
-                    // background-color: blue;
-
-                    background-color: yellow;
+                //
+                &.cell_block {
+                    background-color: green;
+                    // background-color: yellow;
                     
-                    background-size: #{$cell_size}px;
-                    background-repeat: no-repeat;
-                    background-image: url('https://cdn3.iconfinder.com/data/icons/fatcow/32x32_0760/ruby.png');
-                }
-
-                &.cell_b {
-                    // background-color: green;
-                    background-color: yellow;
-                    
-                    background-size: #{$cell_size}px;
-                    background-repeat: no-repeat;
-                    background-image: url('https://cdn1.iconfinder.com/data/icons/fatcow/32x32/tree.png');
+                    // background-size: #{$cell_size}px;
+                    // background-repeat: no-repeat;
+                    // background-image: url('https://cdn1.iconfinder.com/data/icons/fatcow/32x32/tree.png');
 
                     // &.cell_b1 {
                         // background-image: url('https://cdn1.iconfinder.com/data/icons/fatcow/32x32/tree.png');
@@ -174,21 +167,32 @@ body#page-game {
                     // }
                 }
 
-                &.cell_m {
-                    // background-color: red;
-                    background-color: yellow;
+                &.cell_bomb {
+                    background-color: red;
+                    // background-color: yellow;
 
-                    background-size: #{$cell_size}px;
-                    background-repeat: no-repeat;
+                    // background-size: #{$cell_size}px;
+                    // background-repeat: no-repeat;
 
-                    background-image: url('https://cdn3.iconfinder.com/data/icons/pidginsmilies/poop.png');
+                    // background-image: url('https://cdn3.iconfinder.com/data/icons/pidginsmilies/poop.png');
+                }
+
+                //
+                &.cell_bonus {
+                    background-color: blue;
+
+                    // background-color: yellow;
+                    
+                    // background-size: #{$cell_size}px;
+                    // background-repeat: no-repeat;
+                    // background-image: url('https://cdn3.iconfinder.com/data/icons/fatcow/32x32_0760/ruby.png');
                 }
             }
         }
 
         .player {
             position: absolute;
-            @include transition(all, 0.1s, ease-in-out);
+            @include transition(-webkit-transform, 0.1s, ease-in-out);
 
             width: #{$cell_size}px;
             height: #{$cell_size}px;
@@ -200,15 +204,15 @@ body#page-game {
                 // 
             }
 
-            $dirdeg: ('up' 0) ('right' 90) ('down' 180) ('left' 270);
-            @each $var in $dirdeg {
-                $dir: nth($var, 1);
-                $deg: nth($var, 2);
+            // $dirdeg: ('up' 0) ('right' 90) ('down' 180) ('left' 270);
+            // @each $var in $dirdeg {
+            //     $dir: nth($var, 1);
+            //     $deg: nth($var, 2);
 
-                &#{'[direction="'+$dir+'"]'} {
-                    -webkit-transform: rotate(#{$deg}deg)
-                }
-            }
+            //     &#{'[direction="'+$dir+'"]'} {
+            //         -webkit-transform: rotate(#{$deg}deg)
+            //     }
+            // }
 
             $heroes: 'eric_cartman' 'kyle_broflovski' 'kenny_mccormick'
                      'leopold_butters_stotch' 'tank1';
@@ -218,6 +222,13 @@ body#page-game {
                     background-image: url(/img/heroes/#{$hero}/static.png);
                 }
             }
+        }
+
+        .shoot {
+            position: absolute;
+            background: #000;
+            width: 10px;
+            height: 10px;
         }
     }
 }
