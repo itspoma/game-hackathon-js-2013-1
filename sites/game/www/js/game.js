@@ -288,7 +288,7 @@ define(function(require, exports, module){
                 var areaSimple = that.unpackArea(that.M.data.area)
 
                 var separator = areaSimple.substr(0,1)
-                var area = areaSimple.substr(1).split(separator)
+                var area = areaSimple.substr(separator.length).split(separator)
 
                 for (var kx in area) {
                     area[kx] = area[kx].split('')
@@ -299,10 +299,12 @@ define(function(require, exports, module){
 
             that.unpackArea = function (area) {
                 var separator = area.substr(0,1)
-                var areaPacked = area.substr(1)
+                var areaPacked = area.substr(separator.length)
 
-                var areaUnpacked = areaPacked.replace(/@(\w)(\d+)@/g, function(m,a,b) {
-                    return Array(parseInt(b)+1).join(a)
+                var _regexp = new RegExp(separator+'(\\w)(\\d+)'+separator, 'g')
+
+                var areaUnpacked = areaPacked.replace(_regexp, function(m,chr,count) {
+                    return Array(parseInt(count)+1).join(chr)
                 })
 
                 return areaUnpacked
