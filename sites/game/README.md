@@ -4,6 +4,10 @@
 
 --
 
+
+**26.10.2013 day**
+![](http://new.tinygrab.com/7020c0e8b0865eaed60d3eca400391e86470278a52.png)
+
 **26.10.2013 night**
 ![](http://new.tinygrab.com/7020c0e8b09851a3abf5601a419cf94eeec8f5ed7d.png)
 
