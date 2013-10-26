@@ -7,7 +7,7 @@ config.server_resource = "s"
 
 config.area = {
     width: 30,
-    height: 5
+    height: 9
 }
 
 config.player = {

@@ -225,39 +225,77 @@ var M = function() {
         }
 
         that.init = function () {
-            that.game_area = that.generate_empty()
+            var mapName = keys(that.maps)[random(0,keys(that.maps).length-1)]
+
+            log('map: '+mapName)
+
+            that.game_area = that.maps[mapName]()
         }
 
-        // @return [[..], [..], ..]
-        that.generate_empty = function (uid) {
-            var area = []
+        that.maps = {
+            // @return [[..], [..], ..]
+            'random': function (uid) {
+                var area = []
 
-            var perc_blocks = 5
-            var perc_mines = 3
-            var perc_bonus = 2
+                var perc_blocks = 5
+                var perc_mines = 3
+                var perc_bonus = 2
 
-            for (var ix = 0; ix < that.M.config.area.height; ix++) {
-                area[ix] = []
-                for (var iy = 0; iy < that.M.config.area.width; iy++) {
-                    var _type = 'empty'
+                for (var ix = 0; ix < that.M.config.area.height; ix++) {
+                    area[ix] = []
+                    for (var iy = 0; iy < that.M.config.area.width; iy++) {
+                        var _type = 'empty'
 
-                    if (random(0,100) <= perc_blocks) {
-                        _type = 'block'
+                        if (random(0,100) <= perc_blocks) {
+                            _type = 'block'
+                        }
+
+                        if (random(0,100) <= perc_mines) {
+                            _type = 'bomb'
+                        }
+
+                        if (random(0,100) <= perc_bonus) {
+                            _type = 'bonus'
+                        }
+
+                        area[ix][iy] = that.types[_type]
                     }
-
-                    if (random(0,100) <= perc_mines) {
-                        _type = 'bomb'
-                    }
-
-                    if (random(0,100) <= perc_bonus) {
-                        _type = 'bonus'
-                    }
-
-                    area[ix][iy] = that.types[_type]
                 }
-            }
 
-            return area
+                return area
+            },
+
+            // @return [[..], [..], ..]
+            'poma-map1': function (uid) {
+                var area = []
+
+                var _height = that.M.config.area.height
+                var _width = that.M.config.area.width
+
+                for (var ix = 0; ix < _height; ix++) {
+                    area[ix] = []
+                    for (var iy = 0; iy < _width; iy++) {
+                        var _type = 'empty'
+
+                        if (ix == 0
+                         || ix == _height-1
+                         || iy == 0
+                         || iy == _width-1
+                         || (iy%2==1 && ix%2==1))
+                        {
+                            _type = 'bomb'
+                        }
+
+                        if (_type=='empty' && random(0,100)>95) {
+                            _type = 'bonus'
+                        }
+
+                        area[ix][iy] = that.types[_type]
+                    }
+                }
+
+                return area
+            }
         }
 
         // @return {separator}row{sep}row{sep}row{sep}...{sep}row
@@ -322,7 +360,7 @@ var M = function() {
 
                 var cell = that.getCell(_x, _y)
 
-                if ('empty' == cell.type) {
+                if (cell && 'empty' == cell.type) {
                     _pos = {
                         x: _x,
                         y: _y
