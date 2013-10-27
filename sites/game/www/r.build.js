@@ -1,16 +1,12 @@
-// r.js -o r.build.js
-// ./node_modules/requirejs/bin/r.js -o www/r.build.js
 ({
     baseUrl: "js/",
-    // mainConfigFile
 
-    include: ['../app', 'game', 'pages'],
-    // name: "package",
+    include: ['pages', 'engine', '../app'],
     out: "app.min.js",
-    
+
     optimize: 'uglify',
     uglify: {
-        beautify: true,
+        beautify: false,
         max_line_length: 1000
     },
 
@@ -22,5 +18,7 @@
       , 'jquery': 'empty:'
       , 'google-font': 'empty:'
       , 'keypress': 'empty:'
+      , 'events': 'empty:'
+      , 'socket': 'empty:'
     }
 })

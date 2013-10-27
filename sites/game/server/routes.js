@@ -1,20 +1,17 @@
-exports.map = {
-    '/': 'index',
-    '/game': 'game'
-}
+module.exports = function (app) {
+    var swig = require('swig')
 
-//
+    var __viewsdir = __dir + '/views'
 
-var swig = require('swig')
+    app.get('/', function (req, res) {
+        res.send(swig.renderFile(__viewsdir+'/index.html'))
+    })
 
-var __viewsdir = __dirname + '/views'
+    app.get('/ping', function (req, res) {
+        res.send('PONG')
+    })
 
-//
-
-exports.index = function(req, res){
-    res.send(swig.renderFile(__viewsdir+'/index.html'))
-}
-
-exports.game = function(req, res){
-    res.send(swig.renderFile(__viewsdir+'/game.html'))
+    app.get('/game', function (req, res) {
+        res.send(swig.renderFile(__viewsdir+'/game.html'))
+    })
 }

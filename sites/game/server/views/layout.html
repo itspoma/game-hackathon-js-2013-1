@@ -7,7 +7,7 @@
         <title>{% block title %}{% endblock %}</title>
 
         <link rel="stylesheet" href="/css/app.css" />
-        <script data-main="/app.js" src="/js/require.js"></script>
+        <script data-main="/app{%if !debug%}.min{%endif%}.js" src="/js/lib/require.js"></script>
 
         <script type="text/javascript">
             WebFontConfig = {

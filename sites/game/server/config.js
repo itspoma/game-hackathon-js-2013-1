@@ -1,6 +1,6 @@
 var config = {}
 
-config.debug = true
+config.logLevel = 3//ERR
 
 config.server_port = 9999
 config.server_resource = "s"

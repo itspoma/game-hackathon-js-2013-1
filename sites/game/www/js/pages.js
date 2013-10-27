@@ -1,9 +1,8 @@
 define(function(require, exports, module){
     var jquery = require("jquery")
-      , game = require("game");
+      , engine = require("engine");
 
     var p = {
-        //@todo: move to /js/pages/welcome.js
         "welcome": {
             init: function() {
                 $('#play').on('click', function() {
@@ -12,10 +11,9 @@ define(function(require, exports, module){
             }
         },
 
-        //@todo: move to /js/pages/game.js
         "game": {
             init: function() {
-                new game().init()
+                new engine().init()
             }
         }
     }

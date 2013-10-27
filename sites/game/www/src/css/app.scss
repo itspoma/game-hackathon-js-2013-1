@@ -204,15 +204,15 @@ body#page-game {
                 // 
             }
 
-            // $dirdeg: ('up' 0) ('right' 90) ('down' 180) ('left' 270);
-            // @each $var in $dirdeg {
-            //     $dir: nth($var, 1);
-            //     $deg: nth($var, 2);
+            $dirdeg: ('up' 0) ('right' 90) ('down' 180) ('left' 270);
+            @each $var in $dirdeg {
+                $dir: nth($var, 1);
+                $deg: nth($var, 2);
 
-            //     &#{'[direction="'+$dir+'"]'} {
-            //         -webkit-transform: rotate(#{$deg}deg)
-            //     }
-            // }
+                &#{'[direction="'+$dir+'"]'} {
+                    -webkit-transform: rotate(#{$deg}deg)
+                }
+            }
 
             $heroes: 'eric_cartman' 'kyle_broflovski' 'kenny_mccormick'
                      'leopold_butters_stotch' 'tank1';

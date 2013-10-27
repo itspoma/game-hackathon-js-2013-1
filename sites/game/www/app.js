@@ -4,7 +4,7 @@ require.config({
         app: {
             debug: true
         },
-        game: {
+        engine: {
             debug: true
         },
         socket: {
@@ -22,8 +22,9 @@ require.config({
             "//"+window.location.hostname+":9999/s/socket.io",
             "//cdn.socket.io/stable/socket.io"
         ],
+        'events': '/js/modules/events',
+        'socket': '/js/modules/socket',
         'jquery': "//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min",
-        'jquery-rotate': '//www.xiper.net/examples/js-plugins/effects/jqueryrotate/js/jqueryrotate.2.1',
         'google-font': "//ajax.googleapis.com/ajax/libs/webfont/1/webfont",
         'keypress': '/js/lib/keypress'
     }
@@ -47,7 +48,7 @@ define("app", function(require, exports, module) {
     page.init()
 })
 
-;require(["jquery", "google-font"]);
+;require(["jquery", "google-font", "app"]);
 
 log = function() {
     if (console.isDebug && true) {
