@@ -20,5 +20,7 @@
       , 'keypress': 'empty:'
       , 'events': 'empty:'
       , 'socket': 'empty:'
+      , 'cache': 'empty:'
+      , 'sound': 'empty:'
     }
 })

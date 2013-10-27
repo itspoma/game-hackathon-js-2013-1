@@ -22,6 +22,8 @@ require.config({
             "//"+window.location.hostname+":9999/s/socket.io",
             "//cdn.socket.io/stable/socket.io"
         ],
+        'cache': '/js/modules/cache',
+        'sound': '/js/modules/sound',
         'events': '/js/modules/events',
         'socket': '/js/modules/socket',
         'jquery': "//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min",

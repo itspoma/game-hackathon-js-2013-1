@@ -2,6 +2,7 @@ define(function(require, exports, module){
     var jquery = require('jquery')
       , events = require('events')
       , socket = require('socket')
+      , sound = require('sound')
       , e_users = require('engine/users')
       , e_area = require('engine/area')
       , tmp1 = require('keypress')
@@ -51,6 +52,8 @@ define(function(require, exports, module){
             // connect
             events.addListener(['socket.connect', 'socket.reconnect'], function() {
                 $('body').removeClass('loading')
+
+                sound.play('on-start')
             })
 
             // set
@@ -82,11 +85,15 @@ define(function(require, exports, module){
 
             // user.connected
             events.addListener('socket.event user.connected', function (message, cb) {
+                sound.play('on-user-connected')
+
                 that.users.add(message.user)
             })
 
             // user.disconnected
             events.addListener('socket.event user.disconnected', function (message, cb) {
+                sound.play('on-user-disconnected')
+
                 that.users.remove(message.user)
             })
 
@@ -137,8 +144,14 @@ define(function(require, exports, module){
                 var isKilledMe = that.users.getMe().data.uid === killed
 
                 if (isKilledMe) {
-                    // alert('you were killed!')
-                    location.reload()
+                    sound.play('on-user-me-killed')
+
+                    setTimeout(function(){
+                        location.reload()
+                    }, 2000)
+                }
+                else {
+                    sound.play('on-user-killed')
                 }
             })
 
