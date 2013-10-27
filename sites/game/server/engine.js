@@ -45,6 +45,7 @@ var M = function() {
                 // @todo: send few events in one response
                 socket.json.send({'event':'set', 'params':{
                     'area': that.area.toSimplePacked(),
+                    'area_name': that.area.mapName,
                     'cell_types': that.area.getCellTypes(),
                     'me': uid,
                     'users': that.users.getAll(),

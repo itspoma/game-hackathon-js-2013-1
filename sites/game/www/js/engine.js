@@ -144,14 +144,10 @@ define(function(require, exports, module){
                 var isKilledMe = that.users.getMe().data.uid === killed
 
                 if (isKilledMe) {
-                    sound.play('on-user-me-killed')
-
-                    setTimeout(function(){
-                        location.reload()
-                    }, 2000)
+                    events.dispatch('on me.dead')
                 }
                 else {
-                    sound.play('on-user-killed')
+                    events.dispatch('on user.dead', killed)
                 }
             })
 
@@ -166,11 +162,12 @@ define(function(require, exports, module){
             // on dead
             events.addListener('socket.event user.dead', function (message, cb) {
                 if (message.uid == that.data.me) {
-                    log('you dead')
+                    events.dispatch('on me.dead')
                 }
                 else {
+                    events.dispatch('on user.dead', message.uid)
+
                     that.area.setCell(message.pos.x, message.pos.y, 'player')
-                    log('user '+message.uid+' dead')
                 }
             })
 
@@ -183,6 +180,28 @@ define(function(require, exports, module){
                     that.area.setCell(message.pos.x, message.pos.y, 'player')
                     log('user '+message.uid+' get bonus')
                 }
+            })
+
+            // on user dead
+            events.addListener('on user.dead', function (uid) {
+                sound.play('on-user-killed')
+
+                log('user '+uid+' dead')
+            })
+
+            // on me dead
+            events.addListener('on me.dead', function () {
+                sound.play('on-user-me-killed')
+
+                var me = that.users.getMe()
+
+                me.el.fadeOut('fast', function () {
+                    me.el.remove()
+
+                    setTimeout(function (){
+                        location.reload();
+                    }, 1000);
+                })
             })
         }
     }

@@ -12,8 +12,8 @@ config.area = {
 
 config.player = {
     move_ps: 100,
-    shoot_ps: 200,
-    shoot_max_alive: 5
+    shoot_ps: 50,
+    shoot_max_alive: 20
 }
 
 

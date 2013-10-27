@@ -53,6 +53,9 @@ define(function(require, exports, module){
         that.redraw = function() {
             that.init()
 
+            $('body').attr('area', that.M.data.area_name)
+            $('#area').attr('name', that.M.data.area_name)
+
             var area = that.M.data.areaArray
 
             var area_html = []

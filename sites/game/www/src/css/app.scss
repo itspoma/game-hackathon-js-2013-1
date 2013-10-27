@@ -108,8 +108,6 @@ body#page-welcome {
 }
 
 body#page-game {
-    background-color: green;
-
     &.loading {
         background-color: red;
 
@@ -118,16 +116,9 @@ body#page-game {
         }
     }
 
+    $cell_size: 40;
+
     #area {
-        $cell_size: 40;
-
-        // .bullet{
-        //       width: 3px;
-        //       height: 15px;
-        //       background-color: red;
-        //       position: absolute;
-        // }
-
         .row {
             clear: both;
             height: #{$cell_size}px;
@@ -204,6 +195,73 @@ body#page-game {
                 // 
             }
 
+            // background-image: url(/img/heros_sprite/1_32x48.png);
+            // background-position: 4px -4px;
+
+            // &[direction="left"] {
+            //     background-position: 5px -53px;
+
+            //     &[direction_step="2"] {
+            //         background-position: -27px -53px;
+            //     }
+
+            //     &[direction_step="3"] {
+            //         background-position: -59px -53px;
+            //     }
+
+            //     &[direction_step="4"] {
+            //         background-position: -91px -53px;
+            //     }
+            // }
+
+            // &[direction="right"] {
+            //     background-position: 4px -100px;
+
+            //     &[direction_step="2"] {
+            //         background-position: -27px -100px;
+            //     }
+
+            //     &[direction_step="3"] {
+            //         background-position: -59px -100px;
+            //     }
+
+            //     &[direction_step="4"] {
+            //         background-position: -91px -100px;
+            //     }
+            // }
+
+            // &[direction="down"] {
+            //     background-position: 4px -4px;
+
+            //     &[direction_step="2"] {
+            //         background-position: -27px -4px;
+            //     }
+
+            //     &[direction_step="3"] {
+            //         background-position: -59px -4px;
+            //     }
+
+            //     &[direction_step="4"] {
+            //         background-position: -91px -4px;
+            //     }
+            // }
+
+            // &[direction="up"] {
+            //     background-position: 4px -150px;
+
+            //     &[direction_step="2"] {
+            //         background-position: -27px -150px;
+            //     }
+
+            //     &[direction_step="3"] {
+            //         background-position: -59px -150px;
+            //     }
+
+            //     &[direction_step="4"] {
+            //         background-position: -91px -150px;
+            //     }
+            // }
+
             $dirdeg: ('up' 0) ('right' 90) ('down' 180) ('left' 270);
             @each $var in $dirdeg {
                 $dir: nth($var, 1);
@@ -226,9 +284,95 @@ body#page-game {
 
         .shoot {
             position: absolute;
-            background: #000;
-            width: 10px;
-            height: 10px;
+
+            &.shoot_p1 {
+                $w: 5; $h: 5;
+                background: #ACAAAA;
+                width: #{$w}px;
+                height: #{$w}px;
+                margin-top: -#{$w/2 - 2}px;
+                margin-left: -#{$w/2 - 2}px;
+                border-radius: 5px;
+                box-shadow: #FFF 0 0 2px 3px;
+            }
+
+            &.shoot_p2 {
+                $w: 10; $h: 10;
+                background: red;
+                width: #{$w}px;
+                height: #{$w}px;
+                margin-top: -#{$w/2 - 2}px;
+                margin-left: -#{$w/2 - 2}px;
+                border-radius: 5px;
+                box-shadow: yellow 0 0 2px 4px;
+            }
+
+            &.shoot_p3 {
+                $w: 5; $h: 5;
+                background: red;
+                width: #{$w}px;
+                height: #{$w}px;
+                margin-top: -#{$w/2 - 2}px;
+                margin-left: -#{$w/2 - 2}px;
+                border-radius: 5px;
+                box-shadow: #FFF 0 0 2px 3px;
+            }
+        }
+    }
+
+    &[area="random1"] {
+        &.loading {
+            background-image: url('http://www.lemog.fr/lemog_textures/albums/3dtextures/carrelage/azuleros_unis/thumb_032_blcrem_orangev.jpg');
+        }
+
+        background-image: url('http://www.lemog.fr/lemog_textures/albums/3dtextures/carrelage/azuleros_unis/thumb_039_blcrem_bleuciel.jpg');
+        background-size: 82px;
+        background-position: 8px;
+
+        #area[name="random1"] {
+            #table {
+                box-shadow: #8D4F26 0 0 5px 3px;
+            }
+
+            .row {
+                background-image: url('http://www.lemog.fr/lemog_textures/albums/3dtextures/carrelage/azuleros_unis_2/306_saumon_terre_de_sienne.jpg');
+                background-size: 82px;
+
+                .cell.cell_empty {
+                    background-color: transparent;
+                }
+
+                .cell.cell_block {
+                    box-shadow: #415E83 0 0 5px 3px;
+                    border-radius: 5px;
+
+                    background-image: url('http://www.lemog.fr/lemog_textures/albums/3dtextures/carrelage/azuleros_unis_2/thumb_281_turquoise_blanc_creme.jpg');
+                    background-size: 82px;
+                    background-repeat: no-repeat;
+                }
+
+                .cell.cell_bomb {
+                    background-color: transparent;
+
+                    background-image: url('https://cdn1.iconfinder.com/data/icons/CrystalClear/64x64/apps/clanbomber.png');
+                    background-size: #{$cell_size}px;
+                    background-repeat: no-repeat;
+                    background-position: center;
+                }
+
+                .cell.cell_bonus {
+                    background-color: transparent;
+
+                    background-image: url(https://cdn4.iconfinder.com/data/icons/Xmas_Stickers/64x64/xmas_sticker-06.png);
+                    background-size: 45px;
+                    background-repeat: no-repeat;
+                    background-position: center;
+                }
+            }
+            // .cell.cell_empty {
+            //     background-image: url(http://www.lemog.fr/lemog_textures/albums/3dtextures/carrelage/azuleros_bleus_2/thumb_365_victoria.jpg);
+            //     background-size: 82px;
+            // }
         }
     }
 }

@@ -82,7 +82,20 @@ define(function(require, exports, module){
                 return false
             }
 
-            player.el.attr('direction', direction)
+            if (player.el.attr('direction') == direction) {
+                var step = parseInt(player.el.attr('direction_step'))
+                    step++
+
+                if (step > 4) {
+                    step = 1
+                }
+
+                player.el.attr('direction_step', step)
+            }
+            else {
+                player.el.attr('direction', direction)
+                player.el.attr('direction_step', '1')
+            }
             // player.el.rotate({angle: newCoordsP.angle})
 
             that.M.area.setCell(oldCoords.x, oldCoords.y, 'empty')
@@ -140,6 +153,7 @@ define(function(require, exports, module){
             var el = $('<div/>')
                         .addClass('shoot')
                         .addClass('shoot_'+player.data.uid)
+                        .addClass('shoot_p'+random(1,3))
                         .css('left', cellEl.position().left + userSize/2 - shootSize/2)
                         .css('top', cellEl.position().top + userSize/2 - shootSize/2)
                         .data('x', player.data.pos.x)

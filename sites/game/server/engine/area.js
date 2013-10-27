@@ -37,36 +37,42 @@ var _module = function(M) {
     }
 
     that.init = function () {
-        var mapName = keys(that.maps)[random(0,keys(that.maps).length-1)]
+        that.mapName = keys(that.maps)[random(0,keys(that.maps).length-1)]
 
-        log.debug('map: '+mapName)
+        log.debug('map: '+that.mapName)
 
-        that.game_area = that.maps[mapName]()
+        var mapBuilder = that.maps[that.mapName]
+        if (typeof(mapBuilder) == 'string') {
+            mapBuilder = that.maps[mapBuilder]
+        }
+
+        that.game_area = mapBuilder()
     }
 
     that.maps = {
-        // @return [[..], [..], ..]
-        'random': function (uid) {
+        //
+        'random': function (o) {
             var area = []
 
-            var perc_blocks = 5
-            var perc_mines = 3
-            var perc_bonus = 2
+            o = o || {}
+            o.perc_blocks = o.perc_blocks || 7
+            o.perc_mines = o.perc_mines || 5
+            o.perc_bonus = o.perc_bonus || 2
 
             for (var ix = 0; ix < that.M.config.area.height; ix++) {
                 area[ix] = []
                 for (var iy = 0; iy < that.M.config.area.width; iy++) {
                     var _type = 'empty'
 
-                    if (random(0,100) <= perc_blocks) {
+                    if (random(0,100) <= o.perc_blocks) {
                         _type = 'block'
                     }
 
-                    if (random(0,100) <= perc_mines) {
+                    if (random(0,100) <= o.perc_mines) {
                         _type = 'bomb'
                     }
 
-                    if (random(0,100) <= perc_bonus) {
+                    if (random(0,100) <= o.perc_bonus) {
                         _type = 'bonus'
                     }
 
@@ -77,8 +83,16 @@ var _module = function(M) {
             return area
         },
 
-        // @return [[..], [..], ..]
-        'poma-map1': function (uid) {
+        'random1': function () {
+            return that.maps['random']({
+                perc_blocks: 10,
+                perc_mines: 10,
+                perc_bonus: 5
+            });
+        },
+
+        //
+        'poma-map1': function () {
             var area = []
 
             var _height = that.M.config.area.height
